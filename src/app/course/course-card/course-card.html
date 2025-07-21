@@ -1,0 +1,28 @@
+<nz-card
+  class="chatbot-card"
+  nzHoverable
+  nzTitle="Program Overview"
+  (click)="navigateToCourse()"
+>
+  <div class="card-content">
+    <div class="course-info">
+      {{ course.description }}
+    </div>
+
+    <div class="course-info">
+      <nz-tag nzColor="default">
+        <nz-icon nzType="clock-circle" />
+        <span>{{ course.totalHours }} hrs</span>
+      </nz-tag>
+      <nz-tag
+        [nzColor]="getRandomColor()"
+        *ngFor="let skill of course.skills"
+        >{{ skill }}</nz-tag
+      >
+    </div>
+  </div>
+  <!-- 
+  <ng-template #actionView>
+    <button nz-button nzType="primary">View Details</button>
+  </ng-template> -->
+</nz-card>

@@ -1,0 +1,39 @@
+.chatbot-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  max-width: 400px;
+  font-size: 14px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.course-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.chatbot-card .program-id {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 10px;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px;
+}

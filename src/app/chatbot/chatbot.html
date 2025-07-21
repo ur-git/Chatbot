@@ -1,0 +1,119 @@
+<nz-layout class="chat-layout">
+  <!-- Chat header -->
+  <nz-header class="chat-header">
+    <div class="header-content">
+      <div class="logo">
+        <nz-icon nzType="robot" nzTheme="outline" class="logo-icon" />
+        <h1 class="logo-title">{{appInfo.name}}</h1>
+      </div>
+
+      <div class="header-actions">
+        <button
+          nz-button
+          nzType="text"
+          nzSize="large"
+          nz-tooltip
+          [nzTooltipTitle]="'Clear Chat'"
+          (click)="clearChat()"
+        >
+          <nz-icon nzType="delete" nzTheme="outline" class="logo-icon" />
+        </button>
+
+        <button
+          nz-button
+          nzType="text"
+          nzSize="large"
+          nz-tooltip
+          [nzTooltipTitle]="'Settings'"
+        >
+          <nz-icon nzType="setting" nzTheme="outline" class="logo-icon" />
+        </button>
+      </div>
+    </div>
+  </nz-header>
+
+  <!-- Chat content -->
+  <nz-content class="chat-content" *ngIf="chatMessages.length > 0">
+    <div class="chat-container" #chatContainer>
+      <div class="messages">
+        <div
+          *ngFor="let message of chatMessages"
+          class="message-wrapper"
+          [ngClass]="{
+            'user-message': message.sender === 'user',
+            'bot-message': message.sender === 'bot'
+          }"
+        >
+          <div class="message-content">
+            <nz-avatar
+              [nzIcon]="message.sender === 'user' ? 'user' : 'robot'"
+              [nzSrc]="message.sender === 'user' ? undefined : undefined"
+              class="message-avatar"
+            ></nz-avatar>
+
+            <div class="message-bubble">
+              <div class="message-text" >{{ message.content }}</div>
+              <div class="typing-indicator" *ngIf="isLoading && message.sender === 'bot'">
+                <span></span><span></span><span></span>
+              </div>
+
+              <!-- Course suggestions -->
+              <div
+                *ngIf="message.courses && message.courses.length > 0"
+                class="course-suggestions"
+              >
+                <nz-divider nzText="Generated Programs"></nz-divider>
+
+                <div class="course-grid">
+                  <app-course-card
+                    *ngFor="let course of message.courses"
+                    [course]="course"
+                    [compact]="true"
+                  ></app-course-card>
+                </div>
+              </div>
+
+              <div class="message-time">
+                {{ message.timestamp | date : "short" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nz-content>
+
+  <!-- Chat footer -->
+  <nz-footer
+    class="chat-footer"
+    [ngStyle]="{ margin: chatMessages.length > 0 ? '0' : 'auto 0' }"
+  >
+    <div class="input-container">
+      <span class="chat-footer-title" *ngIf="chatMessages.length === 0"
+        >What Do You Want to Learn Today?</span
+      >
+      <nz-input-group nzSuffix class="chat-input-group">
+        <textarea
+          nz-input
+          [(ngModel)]="currentMessage"
+          (keypress)="onKeyPress($event)"
+          placeholder="Ask me anything..."
+          [disabled]="isLoading"
+          class="chat-input"
+          style="resize: none"
+          [nzAutosize]="{ minRows: 2, maxRows: 6 }"
+        ></textarea>
+        <button
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          (click)="sendMessage()"
+          [nzLoading]="isLoading"
+          [disabled]="!currentMessage.trim()"
+        >
+          <nz-icon nzType="send" nzTheme="outline" />
+        </button>
+      </nz-input-group>
+    </div>
+  </nz-footer>
+</nz-layout>

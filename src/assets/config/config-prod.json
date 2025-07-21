@@ -1,0 +1,21 @@
+{
+  "apiEndpoints": {
+    "apiBaseUrl": "",
+    "chat": "/chat",
+    "clearhistory": "/clear_history",
+    "getChatHistory": "/history",
+    "courseDetails": "/course"
+  },
+  "application": {
+    "name": "Course Program Generator Bot",
+    "version": "1.0.0",
+    "description": "AI-powered course recommendation chatbot",
+    "supportEmail": "support@yourcompany.com"
+  },
+  "userSettings": {
+    "defaultLanguage": "en",
+    "maxChatHistory": 50,
+    "autoSuggestCourses": true,
+    "notificationsEnabled": true
+  }
+}

@@ -1,59 +1,72 @@
-# ChatbotApp
+# Angular Chatbot Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.5.
+A modern, responsive chatbot application built with Angular 17 and Ng-Zorro that provides course recommendations through AI-powered conversations.
 
-## Development server
+## Tech Stack
 
-To start a local development server, run:
+- **Framework**: Angular 17
+- **UI Library**: Ng-Zorro (Ant Design)
+- **HTTP Client**: Angular HttpClient
+- **Styling**: SCSS
+- **API**: REST endpoints
+- **Build Tool**: Angular CLI
 
-```bash
-ng serve
-```
+## Installation
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Development Commands
 
 ```bash
-ng build
+# Development server
+npm run start:dev
+
+# Production build
+npm run build:prod
+
+# Development build
+npm run build:dev
+
+# Run tests
+npm test
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Environment Configuration
 
-## Running unit tests
+The application supports multiple environments:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- **Development**: Local development with debug features
+- **Production**: Optimized for production deployment
+- **Databricks**: Configured for Databricks deployment
 
-```bash
-ng test
-```
+Configuration is managed through:
 
-## Running end-to-end tests
+- `src/environments/environment.*.ts` files
+- `src/assets/config/app-config.json` centralized configuration
 
-For end-to-end (e2e) testing, run:
+## API Endpoints
 
-```bash
-ng e2e
-```
+The application expects the following REST endpoints:
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- `POST /api/v1/chat` - Send chat messages
+- `GET /api/v1/courses` - Get course list
+- `GET /api/v1/courses/{id}` - Get course details
+- `GET /api/v1/user` - Get user information
 
-## Additional Resources
+## Deployment
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### For Databricks:
+
+1. Update the configuration in `app-config.json`
+2. Build for production: `npm run build:prod`
+3. Deploy the `dist/` folder to your Databricks environment
+
+### For other environments:
+
+1. Update the appropriate environment configuration
+2. Build with the target environment: `npm run build:prod` or `npm run build:dev`
+3. Deploy the built files

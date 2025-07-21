@@ -1,1 +1,47 @@
 /* You can add global styles to this file, and also import other style files */
+@import "ng-zorro-antd/ng-zorro-antd.min.css";
+
+:root {
+  --color-brand-primary: #4f46e5;
+  --color-status-success: #52c41a;
+  --color-status-warning: #faad14;
+  --color-status-error: #ff4d4f;
+
+  /* Backgrounds */
+  --bg-default: #ffffff;
+  --bg-muted: #f7f7f7;
+  --bg-chat-user: var(--color-brand-primary);
+  --bg-chat-bot: var(--bg-muted);
+
+  /* Text Colors */
+  --text-default: #000000;
+  --text-inverse: #ffffff;
+  --text-muted: #8c8c8c;
+  --text-chat-user: var(--text-inverse);
+  --text-chat-bot: var(--text-default);
+
+  /* Border Colors */
+  --border-default: #d9d9d9;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-inverse);
+  line-height: 1.6;
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+.ant-card-body {
+  padding: 16px;
+}
