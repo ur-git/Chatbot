@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Config } from './config';
 import { Asset, ProgramDetails, Topic } from '../interfaces/course-interface';
+import { Storage } from './storage';
 
 @Injectable({
   providedIn: 'root',
@@ -9,21 +10,16 @@ import { Asset, ProgramDetails, Topic } from '../interfaces/course-interface';
 export class CourseService {
   private http = inject(HttpClient);
   private configService = inject(Config);
+  private storageService = inject(Storage);
   private programDetails = signal<any>(null);
   constructor() {}
 
   getProgramDetailsApi(courseId: string) {
     const endpoint = this.configService.getApiEndpoint('courseDetails');
-    const URL = `${this.configService.apiBaseUrl}${endpoint}`;
+    const sessionId = this.storageService.getItem('sessionId'); 
+    const URL = `${this.configService.apiBaseUrl}${endpoint}/${courseId}/${sessionId}`;
 
-    const params = new HttpParams().append('courseId', courseId);
-
-    // const headers = new HttpHeaders({
-    //   'Content-Type': 'application/json',
-    // });
-    const options = { params };
-
-    return this.http.get(URL, options);
+    return this.http.get(URL);
   }
 
   addProgramDetails(response: any) {

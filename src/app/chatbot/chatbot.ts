@@ -27,6 +27,7 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { Config } from '../services/config';
+import { Storage } from '../services/storage';
 
 @Component({
   selector: 'app-chatbot',
@@ -59,7 +60,7 @@ export class Chatbot {
   private message = inject(NzMessageService);
   private modal = inject(NzModalService);
   private configService = inject(Config);
-
+  private storageService = inject(Storage);
   chatMessages: ChatMessage[] = [];
   currentMessage = '';
   isLoading = false;
@@ -169,6 +170,8 @@ export class Chatbot {
     let botResponse = {};
     const responseType = response.type;
     const responseData = response.data;
+    const sessionId = response.session_id;
+    this.storageService.setItem('sessionId', sessionId);
     if (responseType === 'basic') {
       botResponse = {
         id: responseData.id,

@@ -4,7 +4,7 @@ import { Program } from './course-interface';
 export interface ChatMessage {
   id: string;
   content: string;
-  sender: 'user' | 'bot';
+  sender: 'user' | 'bot' | 'typing';
   timestamp: Date;
   type: 'text' | 'course-suggestion';
   programs?: Program[];

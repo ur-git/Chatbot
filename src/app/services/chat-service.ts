@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ChatMessage } from '../interfaces/chat-interface';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Config } from './config';
 import { Storage } from './storage';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -17,7 +17,24 @@ export class ChatService {
 
   constructor() {
     // Initialize chat messages from storage
-    this.chatMessages.set(this.storageService.getItem('chatMessages') || []);
+    const chatMessages = this.storageService.getItem('chatMessages');
+    if (chatMessages) {
+      this.chatMessages.set(chatMessages);
+    } else {
+      this.initializeChat();
+    }
+  }
+
+  initializeChat() {
+    const chatMessage: ChatMessage = {
+      id: this.generateId(),
+      content:
+        "Hey! I'm your AI assistant here to generate a personalized program for you.",
+      sender: 'bot',
+      timestamp: new Date(),
+      type: 'text',
+    };
+    this.addMessage(chatMessage);
   }
 
   /**
@@ -47,18 +64,38 @@ export class ChatService {
    * Service function to send message to server
    */
   sendMessageToServer(message: string) {
+    this.addTypingResponse();
+
     const chatEndpoint = this.configService.getApiEndpoint('chat');
     const URL = `${this.configService.apiBaseUrl}${chatEndpoint}`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    const body = {
+
+    let body: any = {
       query: message,
     };
+
+    if (this.storageService.getItem('sessionId')) {
+      body.session_id = this.storageService.getItem('sessionId');
+    }
+
     const options = { headers };
 
     return this.http.post(URL, body, options);
+  }
+
+  addTypingResponse() {
+    const typingMessage: ChatMessage = {
+      id: this.generateId(),
+      content: 'Thinking...',
+      sender: 'typing',
+      timestamp: new Date(),
+      type: 'text',
+    };
+
+    this.addMessage(typingMessage);
   }
 
   /**
@@ -73,8 +110,11 @@ export class ChatService {
       timestamp: new Date(),
       programs: response.suggestedPrograms,
     };
-
-    this.addMessage(botMessage);
+    this.chatMessages.update((messages) => [
+      ...messages.filter((msg) => msg.sender !== 'typing'),
+      botMessage,
+    ]);
+    this.storageService.setItem('chatMessages', this.chatMessages());
   }
 
   /**
@@ -97,12 +137,14 @@ export class ChatService {
    */
   clearChatApi() {
     const chatEndpoint = this.configService.getApiEndpoint('clearhistory');
-    const URL = `${this.configService.apiBaseUrl}${chatEndpoint}`;
+    const sessionId = this.storageService.getItem('sessionId');
+    const URL = `${this.configService.apiBaseUrl}${chatEndpoint}/${sessionId}`;
     return this.http.post(URL, {});
   }
 
   clearChat() {
     this.chatMessages.set([]);
     this.storageService.clear();
+    this.initializeChat();
   }
 }

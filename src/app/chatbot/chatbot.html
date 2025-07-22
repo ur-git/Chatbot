@@ -3,8 +3,9 @@
   <nz-header class="chat-header">
     <div class="header-content">
       <div class="logo">
-        <nz-icon nzType="robot" nzTheme="outline" class="logo-icon" />
-        <h1 class="logo-title">{{appInfo.name}}</h1>
+        <!-- <nz-icon nzType="robot" nzTheme="outline" class="logo-icon" /> -->
+        <img [src]="appInfo.logo" alt="logo" class="logo-img" />
+        <h1 class="logo-title">{{ appInfo.name }}</h1>
       </div>
 
       <div class="header-actions">
@@ -33,7 +34,7 @@
   </nz-header>
 
   <!-- Chat content -->
-  <nz-content class="chat-content" *ngIf="chatMessages.length > 0">
+  <nz-content class="chat-content">
     <div class="chat-container" #chatContainer>
       <div class="messages">
         <div
@@ -41,7 +42,8 @@
           class="message-wrapper"
           [ngClass]="{
             'user-message': message.sender === 'user',
-            'bot-message': message.sender === 'bot'
+            'bot-message': message.sender === 'bot',
+            'typing-message': message.sender === 'typing'
           }"
         >
           <div class="message-content">
@@ -52,10 +54,11 @@
             ></nz-avatar>
 
             <div class="message-bubble">
-              <div class="message-text" >{{ message.content }}</div>
-              <!-- <div class="typing-indicator" *ngIf="isLoading && message.sender === 'bot'">
+              <div class="message-text" *ngIf="message.sender === 'user'">{{ message.content }}</div>
+              <div class="message-text" *ngIf="message.sender === 'bot'">{{ message.content }}</div>
+              <div class="typing-indicator" *ngIf="message.sender === 'typing'">
                 <span></span><span></span><span></span>
-              </div> -->
+              </div>
 
               <!-- Course suggestions -->
               <div
@@ -73,7 +76,7 @@
                 </div>
               </div>
 
-              <div class="message-time">
+              <div class="message-time" *ngIf="message.sender !== 'typing'">
                 {{ message.timestamp | date : "short" }}
               </div>
             </div>
@@ -86,12 +89,11 @@
   <!-- Chat footer -->
   <nz-footer
     class="chat-footer"
-    [ngStyle]="{ margin: chatMessages.length > 0 ? '0' : 'auto 0' }"
   >
     <div class="input-container">
-      <span class="chat-footer-title" *ngIf="chatMessages.length === 0"
-        >What Do You Want to Learn Today?</span
-      >
+      <!-- <span class="chat-footer-title" *ngIf="chatMessages.length === 0">{{
+        appInfo.description
+      }}</span> -->
       <nz-input-group nzSuffix class="chat-input-group">
         <textarea
           nz-input
