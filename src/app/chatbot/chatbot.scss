@@ -83,7 +83,7 @@
       border-radius: 18px 18px 4px 18px;
 
       .message-time {
-        font-size: 12px;
+        font-size: 10px;
         opacity: 0.7;
         text-align: right;
       }
@@ -95,11 +95,11 @@
       background: var(--bg-chat-bot);
       color: var(--text-chat-bot);
       border-radius: 18px 18px 18px 4px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       max-width: 960px;
 
       .message-time {
-        font-size: 12px;
+        font-size: 10px;
         opacity: 0.7;
         text-align: left;
       }
@@ -119,9 +119,10 @@
 }
 
 .message-bubble {
-  padding: 12px 16px;
+  padding: 10px 12px;
   position: relative;
   word-wrap: break-word;
+  border: 1px solid var(--border-default);
 
   .message-text {
     font-size: 14px;
@@ -131,8 +132,8 @@
 }
 
 .course-suggestions {
-  // margin-top: 16px;
-  // padding: 16px;
+  margin: 10px 0;
+  padding: 5px;
   background: var(--bg-muted);
   border-radius: 10px;
   // border-top: 1px solid var(--border-default);
@@ -144,7 +145,7 @@
   justify-content: center;
   gap: 15px;
   overflow-x: auto;
-  padding-bottom: 16px;
+  padding: 0px 5px 10px;
 }
 
 .chat-footer {
@@ -185,7 +186,7 @@
     border-radius: 24px;
     padding: 12px 16px;
     font-size: 14px;
-    background: var(--bg-muted);
+    // background: var(--bg-muted);
   }
 
   .ant-btn {

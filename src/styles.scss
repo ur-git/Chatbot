@@ -9,15 +9,15 @@
 
   /* Backgrounds */
   --bg-default: #ffffff;
-  --bg-muted: #f7f7f7;
-  --bg-chat-user: var(--color-brand-primary);
-  --bg-chat-bot: var(--bg-muted);
+  --bg-muted: #d8d4d9;
+  --bg-chat-user: #f1ebe4;
+  --bg-chat-bot: #f5f4f5;
 
   /* Text Colors */
   --text-default: #000000;
   --text-inverse: #ffffff;
   --text-muted: #8c8c8c;
-  --text-chat-user: var(--text-inverse);
+  --text-chat-user: var(--text-default);
   --text-chat-bot: var(--text-default);
 
   /* Border Colors */

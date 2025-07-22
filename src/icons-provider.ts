@@ -4,7 +4,9 @@ import {
   SendOutline,
   StarOutline,
   UserOutline,
-  SettingOutline
+  SettingOutline,
+  ArrowLeftOutline,
+  DragOutline
 } from '@ant-design/icons-angular/icons';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
@@ -13,7 +15,9 @@ const icons = [
   RobotOutline,
   StarOutline,
   UserOutline,
-  SettingOutline
+  SettingOutline,
+  ArrowLeftOutline,
+  DragOutline
 ];
 
 export function provideNzIcons(): EnvironmentProviders {

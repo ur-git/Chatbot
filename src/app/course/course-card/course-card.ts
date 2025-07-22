@@ -20,26 +20,43 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     NzButtonModule,
     NzGridModule,
     NzIconModule,
-    NzBadgeModule
+    NzBadgeModule,
   ],
   templateUrl: './course-card.html',
   styleUrl: './course-card.scss',
 })
 export class CourseCard {
-  @Input() course!: any;
+  @Input() program!: any;
   @Input() compact: boolean = false;
   private router = inject(Router);
 
-  ngOnInit() {
-    console.log(this.course);
-  }
+  ngOnInit() {}
 
   navigateToCourse() {
-    this.router.navigate(['/course', this.course.id]);
+    // this.router.navigate(['/course', this.course.id]);
+    const urlTree = this.router.createUrlTree(['/course'], {
+      queryParams: { courseId: this.program.id },
+    });
+    const fullUrl = window.location.origin + this.router.serializeUrl(urlTree);
+    window.open(fullUrl, '_blank');
   }
 
   getRandomColor(): string {
-    const colors = ["pink", "red", "yellow", "orange", "cyan", "green", "blue", "purple", "geekblue", "magenta", "volcano", "gold", "lime"];
+    const colors = [
+      'pink',
+      'red',
+      'yellow',
+      'orange',
+      'cyan',
+      'green',
+      'blue',
+      'purple',
+      'geekblue',
+      'magenta',
+      'volcano',
+      'gold',
+      'lime',
+    ];
     return colors[Math.floor(Math.random() * colors.length)];
   }
 }

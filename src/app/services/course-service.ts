@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Course, CourseDetails } from '../interfaces/course-interface';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { Config } from './config';
 
 @Injectable({
@@ -10,21 +8,36 @@ import { Config } from './config';
 export class CourseService {
   private http = inject(HttpClient);
   private configService = inject(Config);
+  private programDetails = signal<any>(null);
   constructor() {}
 
-  getCourseDetails(courseId: string): Observable<CourseDetails> {
-    const endpoint = this.configService.getApiEndpoint('courseDetailsEndpoint');
-    const url = endpoint.replace('{id}', courseId);
-    return this.http.get<CourseDetails>(url);
+  getProgramDetailsApi(courseId: string) {
+    const endpoint = this.configService.getApiEndpoint('courseDetails');
+    const URL = `${this.configService.apiBaseUrl}${endpoint}`;
+
+    const params = new HttpParams().append('courseId', courseId);
+
+    // const headers = new HttpHeaders({
+    //   'Content-Type': 'application/json',
+    // });
+    const options = { params };
+
+    return this.http.get(URL, options);
   }
 
-  searchCourses(query: string): Observable<Course[]> {
-    const endpoint = this.configService.getApiEndpoint('coursesEndpoint');
-    return this.http.get<Course[]>(`${endpoint}?search=${query}`);
+  addProgramDetails(response: any) {
+    const programDetails: any = {
+      id: response.id,
+      title: response.title,
+      description: response.description,
+      totalHours: response.duration_hours,
+      skills: response.skills_covered,
+      courses: response.courses || [],
+    };
+    this.programDetails.set(programDetails);
   }
 
-  getAllCourses(): Observable<Course[]> {
-    const endpoint = this.configService.getApiEndpoint('coursesEndpoint');
-    return this.http.get<Course[]>(endpoint);
+  getProgramDetails() {
+    return this.programDetails();
   }
 }

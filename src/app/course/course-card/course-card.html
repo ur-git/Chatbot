@@ -6,17 +6,17 @@
 >
   <div class="card-content">
     <div class="course-info">
-      {{ course.description }}
+      {{ program.description }}
     </div>
 
     <div class="course-info">
       <nz-tag nzColor="default">
         <nz-icon nzType="clock-circle" />
-        <span>{{ course.totalHours }} hrs</span>
+        <span>{{ program.totalHours }} hrs</span>
       </nz-tag>
       <nz-tag
         [nzColor]="getRandomColor()"
-        *ngFor="let skill of course.skills"
+        *ngFor="let skill of program.skills"
         >{{ skill }}</nz-tag
       >
     </div>

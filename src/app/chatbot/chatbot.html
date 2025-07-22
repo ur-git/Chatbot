@@ -53,21 +53,21 @@
 
             <div class="message-bubble">
               <div class="message-text" >{{ message.content }}</div>
-              <div class="typing-indicator" *ngIf="isLoading && message.sender === 'bot'">
+              <!-- <div class="typing-indicator" *ngIf="isLoading && message.sender === 'bot'">
                 <span></span><span></span><span></span>
-              </div>
+              </div> -->
 
               <!-- Course suggestions -->
               <div
-                *ngIf="message.courses && message.courses.length > 0"
+                *ngIf="message.programs && message.programs.length > 0"
                 class="course-suggestions"
               >
                 <nz-divider nzText="Generated Programs"></nz-divider>
 
                 <div class="course-grid">
                   <app-course-card
-                    *ngFor="let course of message.courses"
-                    [course]="course"
+                    *ngFor="let program of message.programs"
+                    [program]="program"
                     [compact]="true"
                   ></app-course-card>
                 </div>

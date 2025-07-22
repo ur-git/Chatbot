@@ -66,7 +66,7 @@ export class Chatbot {
   private shouldScrollToBottom = false;
   isVisible = false;
   isOkLoading = false;
-  appInfo: any = null
+  appInfo: any = null;
 
   constructor() {
     effect(
@@ -142,12 +142,6 @@ export class Chatbot {
       this.chatService
         .sendMessage(messageContent)
         .pipe(
-          tap(() => {
-            this.chatService.addBotResponse({
-              message: '',
-              type: 'thinking',
-            });
-          }),
           finalize(() => {
             this.isLoading = false;
           })
@@ -164,7 +158,7 @@ export class Chatbot {
 
             this.chatService.addBotResponse({
               message: 'Sorry, I encountered an error. Please try again.',
-              suggestedCourses: [],
+              suggestedPrograms: [],
             });
           },
         });
@@ -185,8 +179,10 @@ export class Chatbot {
       botResponse = {
         id: responseData.id,
         type: responseType,
-        message: responseData.message || 'Here are some programs that might interest you!',
-        suggestedCourses: responseData.program || [],
+        message:
+          responseData.message ||
+          'Here are some programs that might interest you!',
+        suggestedPrograms: responseData.program || [],
       };
     }
 

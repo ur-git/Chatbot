@@ -1,5 +1,5 @@
 import { OwlOptions } from 'ngx-owl-carousel-o';
-import { Course } from './course-interface';
+import { Program } from './course-interface';
 
 export interface ChatMessage {
   id: string;
@@ -7,7 +7,7 @@ export interface ChatMessage {
   sender: 'user' | 'bot';
   timestamp: Date;
   type: 'text' | 'course-suggestion';
-  courses?: Course[];
+  programs?: Program[];
 }
 
 export const carouselOptions: OwlOptions = {

@@ -41,27 +41,17 @@ The application supports multiple environments:
 
 - **Development**: Local development with debug features
 - **Production**: Optimized for production deployment
-- **Databricks**: Configured for Databricks deployment
 
 Configuration is managed through:
 
 - `src/environments/environment.*.ts` files
-- `src/assets/config/app-config.json` centralized configuration
-
-## API Endpoints
-
-The application expects the following REST endpoints:
-
-- `POST /api/v1/chat` - Send chat messages
-- `GET /api/v1/courses` - Get course list
-- `GET /api/v1/courses/{id}` - Get course details
-- `GET /api/v1/user` - Get user information
+- `src/assets/config/config-prod.json` centralized configuration
 
 ## Deployment
 
 ### For Databricks:
 
-1. Update the configuration in `app-config.json`
+1. Update the configuration in `config-prod.json`
 2. Build for production: `npm run build:prod`
 3. Deploy the `dist/` folder to your Databricks environment
 

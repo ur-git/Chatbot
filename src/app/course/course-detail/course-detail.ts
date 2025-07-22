@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -8,13 +8,14 @@ import { NzRateModule } from 'ng-zorro-antd/rate';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { CourseDetails } from '../../interfaces/course-interface';
+import { ProgramDetails } from '../../interfaces/course-interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { CourseService } from '../../services/course-service';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 
 @Component({
   selector: 'app-course-detail',
@@ -30,6 +31,7 @@ import { Subject, takeUntil } from 'rxjs';
     NzTagModule,
     NzStepsModule,
     NzListModule,
+    NzSkeletonModule,
   ],
   templateUrl: './course-detail.html',
   styleUrl: './course-detail.scss',
@@ -39,16 +41,24 @@ export class CourseDetail {
   private router = inject(Router);
   private courseService = inject(CourseService);
   private message = inject(NzMessageService);
-  course: CourseDetails | null = null;
+  program: any | null = null;
   isLoading = false;
   private destroy$ = new Subject<void>();
 
-  ngOnInit(): void {
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      if (params['id']) {
-        this.loadCourseDetails(params['id']);
-      }
+  constructor() {
+    effect(() => {
+      this.program = this.courseService.getProgramDetails();
     });
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params) => {
+        if (params['courseId']) {
+          this.loadProgramDetails(params['courseId']);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -56,39 +66,30 @@ export class CourseDetail {
     this.destroy$.complete();
   }
 
-  loadCourseDetails(courseId: string): void {
+  loadProgramDetails(courseId: string): void {
     this.isLoading = true;
-    // this.course = {
-    //   id: '1',
-    //   title: 'Course 1',
-    //   description: 'Description 1',
-    //   instructor: 'Instructor 1',
-    //   duration: '1 hour',
-    //   level: 'Beginner',
-    //   rating: 4.5,
-    //   price: 100,
-    //   category: 'Category 1',
-    //   thumbnail: 'https://via.placeholder.com/150',
-    //   tags: ['Tag 1', 'Tag 2'],
-    //   enrolledStudents: 100,
-    //   fullDescription: 'Full description 1',
-    //   syllabus: [],
-    //   prerequisites: [],
-    //   whatYouWillLearn: [],
-    //   instructorBio: 'Instructor bio 1',
-    //   reviews: [],
-    // };
-    this.courseService.getCourseDetails(courseId).pipe(takeUntil(this.destroy$)).subscribe({
-      next: (course) => {
-        this.course = course;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading course details:', error);
-        this.message.error('Failed to load course details');
-        this.router.navigate(['/']);
-      },
-    });
+    this.courseService
+      .getProgramDetailsApi(courseId)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (response: any) => {
+          if (response && response.status === 200) {
+            this.courseService.addProgramDetails(response);
+          } else {
+            this.message.error('Failed to load course details');
+            this.router.navigate(['/']);
+          }
+        },
+        error: (error) => {
+          console.error('Error loading course details:', error);
+          this.message.error('Failed to load course details');
+          this.router.navigate(['/']);
+        },
+      });
   }
 
   goBack(): void {
@@ -96,8 +97,8 @@ export class CourseDetail {
   }
 
   enrollInCourse(): void {
-    if (this.course) {
-      this.message.success(`Successfully enrolled in ${this.course.title}!`);
+    if (this.program) {
+      this.message.success(`Successfully enrolled in ${this.program.title}!`);
       // Here you would typically call an enrollment API
     }
   }

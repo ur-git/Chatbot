@@ -1,6 +1,5 @@
 .chatbot-card {
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   max-width: 400px;
   font-size: 14px;
 }
@@ -14,6 +13,7 @@
 .course-info {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
 }
 

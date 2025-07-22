@@ -1,164 +1,54 @@
-<div class="course-details-container" *ngIf="course">
-  <nz-spin [nzSpinning]="isLoading">
-    <div class="course-header">
-      <button nz-button nzType="text" nzSize="large" (click)="goBack()">
-        <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
-        Back to Chat
-      </button>
+<div class="course-details-container" *ngIf="program">
+  <div class="course-header">
+    <!-- <button nz-button nzType="text" nzSize="large" (click)="goBack()">
+      <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
+      Back to Chat
+    </button> -->
 
-      <div class="course-hero">
-        <div class="course-image">
-          <img [src]="course.thumbnail" [alt]="course.title" />
+    <nz-card class="course-info">
+      <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+        <nz-card-meta
+          [nzTitle]="program.title"
+          [nzDescription]="program.description"
+        >
+        </nz-card-meta>
+        <div class="course-tags">
+          <nz-tag *ngFor="let tag of program.skills" [nzColor]="'blue'">
+            {{ tag }}
+          </nz-tag>
         </div>
+      </nz-skeleton>
+    </nz-card>
 
-        <div class="course-info">
-          <h1>{{ course.title }}</h1>
-          <p class="course-description">{{ course.description }}</p>
+    <ng-template #actionSetting>
+      <nz-icon nzType="setting" />
+    </ng-template>
+    <ng-template #actionEdit>
+      <nz-icon nzType="edit" />
+    </ng-template>
+    <ng-template #actionEllipsis>
+      <nz-icon nzType="ellipsis" />
+    </ng-template>
+  </div>
 
-          <div class="course-meta">
-            <div class="meta-item">
-              <i nz-icon nzType="user" nzTheme="outline"></i>
-              <span>{{ course.instructorBio }}</span>
-            </div>
-            <div class="meta-item">
-              <i nz-icon nzType="clock-circle" nzTheme="outline"></i>
-              <span>{{ course.duration }}</span>
-            </div>
-            <div class="meta-item">
-              <nz-rate [ngModel]="course.rating" nzDisabled></nz-rate>
-              <span>({{ course.rating }}/5)</span>
-            </div>
-            <div class="meta-item">
-              <i nz-icon nzType="team" nzTheme="outline"></i>
-              <span>{{ course.enrolledStudents }} students</span>
-            </div>
-          </div>
+  <div
+    class="course-content"
+    *ngIf="program.courses && program.courses.length > 0"
+  >
+    <nz-card
+      class="course-card"
+      *ngFor="let course of program.courses"
+      [nzExtra]="dragTemplate"
+      [nzTitle]="course.title"
+    >
+      <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+        <p>{{ course.description }}</p>
+        <div class="course-card-content"></div>
+      </nz-skeleton>
+    </nz-card>
 
-          <div class="course-tags">
-            <nz-tag [nzColor]="getLevelColor(course.level)" nzSize="large">{{
-              course.level
-            }}</nz-tag>
-            <nz-tag *ngFor="let tag of course.tags" nzColor="blue">{{
-              tag
-            }}</nz-tag>
-          </div>
-
-          <div class="course-actions">
-            <div class="price">
-              <!-- <span class="current-price">${{ course.price }}</span> -->
-            </div>
-            <button
-              nz-button
-              nzType="primary"
-              nzSize="large"
-              (click)="enrollInCourse()"
-            >
-              Enroll Now
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="course-content">
-      <nz-tabset nzType="card" nzSize="large">
-        <nz-tab nzTitle="Overview">
-          <div class="overview-content">
-            <nz-card nzTitle="Course Description">
-              <p>{{ course.fullDescription }}</p>
-            </nz-card>
-
-            <nz-card nzTitle="What You'll Learn">
-              <ul class="learning-objectives">
-                <li *ngFor="let objective of course.whatYouWillLearn">
-                  <i
-                    nz-icon
-                    nzType="check-circle"
-                    nzTheme="fill"
-                    class="check-icon"
-                  ></i>
-                  {{ objective }}
-                </li>
-              </ul>
-            </nz-card>
-
-            <nz-card nzTitle="Prerequisites">
-              <ul class="prerequisites">
-                <li *ngFor="let prerequisite of course.prerequisites">
-                  <i nz-icon nzType="book" nzTheme="outline"></i>
-                  {{ prerequisite }}
-                </li>
-              </ul>
-            </nz-card>
-          </div>
-        </nz-tab>
-
-        <nz-tab nzTitle="Curriculum">
-          <div class="curriculum-content">
-            <nz-steps nzDirection="vertical">
-              <nz-step
-                *ngFor="let module of course.syllabus; let i = index"
-                [nzTitle]="module.module"
-                [nzDescription]="module.duration"
-                nzStatus="wait"
-              >
-                <ng-template #nzContent>
-                  <ul class="module-topics">
-                    <li *ngFor="let topic of module.topics">{{ topic }}</li>
-                  </ul>
-                </ng-template>
-              </nz-step>
-            </nz-steps>
-          </div>
-        </nz-tab>
-
-        <nz-tab nzTitle="Instructor">
-          <div class="instructor-content">
-            <nz-card>
-              <div class="instructor-info">
-                <nz-avatar
-                  nzSize="large"
-                  [nzText]="course.instructorBio.charAt(0)"
-                ></nz-avatar>
-                <div class="instructor-details">
-                  <h3>{{ course.instructorBio }}</h3>
-                  <p>{{ course.instructorBio }}</p>
-                </div>
-              </div>
-            </nz-card>
-          </div>
-        </nz-tab>
-
-        <nz-tab nzTitle="Reviews">
-          <div class="reviews-content">
-            <nz-list
-              [nzDataSource]="course.reviews"
-              [nzRenderItem]="reviewTemplate"
-              nzItemLayout="horizontal"
-            >
-              <ng-template #reviewTemplate let-review>
-                <nz-list-item>
-                  <nz-list-item-meta
-                    [nzTitle]="review.studentName"
-                    [nzDescription]="(review.date | date : 'mediumDate') ?? ''"
-                    [nzAvatar]="review.studentName.charAt(0)"
-                  ></nz-list-item-meta>
-                  <div class="review-content">
-                    <nz-rate [ngModel]="review.rating" nzDisabled></nz-rate>
-                    <p>{{ review.comment }}</p>
-                  </div>
-                </nz-list-item>
-              </ng-template>
-            </nz-list>
-          </div>
-        </nz-tab>
-      </nz-tabset>
-    </div>
-  </nz-spin>
-</div>
-
-<div class="loading-placeholder" *ngIf="isLoading">
-  <nz-spin nzSize="large">
-    <div class="loading-content">Loading course details...</div>
-  </nz-spin>
+    <ng-template #dragTemplate>
+      <nz-icon nzType="drag" nzTheme="outline" />
+    </ng-template>
+  </div>
 </div>

@@ -71,7 +71,7 @@ export class ChatService {
       type: response.type,
       sender: 'bot',
       timestamp: new Date(),
-      courses: response.suggestedCourses,
+      programs: response.suggestedPrograms,
     };
 
     this.addMessage(botMessage);
@@ -95,10 +95,10 @@ export class ChatService {
   /**
    * Service function to clear chat
    */
-  clearChatApi()   {
+  clearChatApi() {
     const chatEndpoint = this.configService.getApiEndpoint('clearhistory');
     const URL = `${this.configService.apiBaseUrl}${chatEndpoint}`;
-    return this.http.post(URL, {})
+    return this.http.post(URL, {});
   }
 
   clearChat() {
