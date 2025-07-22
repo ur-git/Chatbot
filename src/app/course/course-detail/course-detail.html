@@ -5,27 +5,32 @@
       Back to Chat
     </button> -->
 
-    <nz-card class="course-info">
+    <nz-card class="course-header-card">
       <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
         <nz-card-meta
           [nzTitle]="program.title"
           [nzDescription]="program.description"
         >
         </nz-card-meta>
+        <div class="course-meta">
+          <nz-tag nzColor="default">
+            <nz-icon nzType="clock-circle" />
+            <span>{{ program.totalHours }} hrs</span>
+          </nz-tag>
+          <nz-tag nzColor="default" *ngIf="program.programs && program.programs.length > 0">
+            <nz-icon nzType="book" />
+            <span>{{ program.programs.length }} topics</span>
+          </nz-tag>
+        </div>
         <div class="course-tags">
           <nz-tag *ngFor="let tag of program.skills" [nzColor]="'blue'">
             {{ tag }}
           </nz-tag>
         </div>
+
       </nz-skeleton>
     </nz-card>
 
-    <ng-template #actionSetting>
-      <nz-icon nzType="setting" />
-    </ng-template>
-    <ng-template #actionEdit>
-      <nz-icon nzType="edit" />
-    </ng-template>
     <ng-template #actionEllipsis>
       <nz-icon nzType="ellipsis" />
     </ng-template>
@@ -33,17 +38,25 @@
 
   <div
     class="course-content"
-    *ngIf="program.courses && program.courses.length > 0"
+    *ngIf="program.programs && program.programs.length > 0"
   >
     <nz-card
-      class="course-card"
-      *ngFor="let course of program.courses"
+      class="course-content-card"
+      *ngFor="let course of program.programs"
       [nzExtra]="dragTemplate"
       [nzTitle]="course.title"
     >
       <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
-        <p>{{ course.description }}</p>
-        <div class="course-card-content"></div>
+        <p class="course-content-card-description">{{ course.description }}</p>
+        <div class="course-card-content">
+          <nz-collapse nzAccordion>
+            @for (asset of course.asset; track asset) {
+              <nz-collapse-panel [nzHeader]="asset.title" [nzActive]="false">
+                <p>{{ asset.description }}</p>
+              </nz-collapse-panel>
+            }
+          </nz-collapse>
+        </div>
       </nz-skeleton>
     </nz-card>
 

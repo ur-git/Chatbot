@@ -16,6 +16,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { CourseService } from '../../services/course-service';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 
 @Component({
   selector: 'app-course-detail',
@@ -32,6 +33,7 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
     NzStepsModule,
     NzListModule,
     NzSkeletonModule,
+    NzCollapseModule,
   ],
   templateUrl: './course-detail.html',
   styleUrl: './course-detail.scss',
@@ -41,7 +43,7 @@ export class CourseDetail {
   private router = inject(Router);
   private courseService = inject(CourseService);
   private message = inject(NzMessageService);
-  program: any | null = null;
+  program: ProgramDetails | null = null;
   isLoading = false;
   private destroy$ = new Subject<void>();
 
@@ -68,9 +70,11 @@ export class CourseDetail {
 
   loadProgramDetails(courseId: string): void {
     this.isLoading = true;
+
     this.courseService
       .getProgramDetailsApi(courseId)
       .pipe(
+        takeUntil(this.destroy$),
         finalize(() => {
           this.isLoading = false;
         })

@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import { Course } from '../../interfaces/course-interface';
+import { Program, ProgramDetails } from '../../interfaces/course-interface';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -26,7 +26,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
   styleUrl: './course-card.scss',
 })
 export class CourseCard {
-  @Input() program!: any;
+  @Input() program!: Program;
   @Input() compact: boolean = false;
   private router = inject(Router);
 

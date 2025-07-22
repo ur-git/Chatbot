@@ -45,3 +45,19 @@ body {
 .ant-card-body {
   padding: 16px;
 }
+
+.course-content-card .ant-card-head-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-brand-primary);
+}
+
+.ant-card-meta-title{
+  font-size: 24px;
+}
+
+.course-tags .ant-tag {
+  line-height: 24px;
+  font-size: 14px;
+  padding: 0 10px;
+}
