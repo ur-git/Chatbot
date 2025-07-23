@@ -25,25 +25,18 @@ export class Config {
   private getFallbackConfig() {
     return {
       apiEndpoints: {
-        baseUrl: '',
+        apiBaseUrl: '',
         chat: '/chat',
-        chatdelete: '/chatdelete',
-        courseDetails: '/courseDetails',
-        user: '/user',
-      },
-      features: {
-        enableLogging: true,
-        enableAnalytics: false,
-        debugMode: true,
-      },
-      ui: {
-        theme: 'light',
-        chatRefreshInterval: 1000,
+        clearhistory: '/clear_history',
+        getChatHistory: '/history',
+        programDetails: '/program',
       },
       application: {
-        name: 'ChatBot Learning Platform',
+        name: 'Course Program Generator Bot',
         version: '1.0.0',
-        description: 'AI-powered course recommendation chatbot',
+        logo: 'assets/images/logo.jpg',
+        description:
+          "Hey! I'm your AI assistant here to generate a personalized program for you.",
         supportEmail: 'support@yourcompany.com',
       },
       userSettings: {
@@ -56,11 +49,11 @@ export class Config {
   }
 
   get apiBaseUrl() {
-    if(this.config.apiEndpoints.apiBaseUrl !== ''){
+    if (this.config.apiEndpoints.apiBaseUrl !== '') {
       return this.config.apiEndpoints.apiBaseUrl;
     }
-    const protocol = window.location.protocol; 
-    const host = window.location.host; 
+    const protocol = window.location.protocol;
+    const host = window.location.host;
     return `${protocol}//${host}`;
   }
 

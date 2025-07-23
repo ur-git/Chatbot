@@ -4,7 +4,7 @@
     "chat": "/chat",
     "clearhistory": "/clear_history",
     "getChatHistory": "/history",
-    "courseDetails": "/course"
+    "programDetails": "/program"
   },
   "application": {
     "name": "Course Program Generator Bot",
