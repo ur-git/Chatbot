@@ -14,6 +14,11 @@ export class CourseService {
   private programDetails = signal<any>(null);
   constructor() {}
 
+  /**
+   * Get the program details from the API
+   * @param courseId - The ID of the course
+   * @returns Observable<any>
+   */
   getProgramDetailsApi(courseId: string) {
     const endpoint = this.configService.getApiEndpoint('programDetails');
     const sessionId = this.storageService.getItem('sessionId'); 
@@ -22,6 +27,10 @@ export class CourseService {
     return this.http.get(URL);
   }
 
+  /**
+   * Add the program details to the programDetails signal
+   * @param response - The response from the API
+   */
   addProgramDetails(response: any) {
     const programDetails: ProgramDetails = {
       program_id: response.id,
@@ -54,6 +63,10 @@ export class CourseService {
     this.programDetails.set(programDetails);
   }
 
+  /**
+   * Get the program details from the programDetails signal
+   * @returns ProgramDetails
+   */
   getProgramDetails() {
     return this.programDetails();
   }

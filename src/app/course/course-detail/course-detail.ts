@@ -54,11 +54,11 @@ export class CourseDetail {
   }
 
   ngOnInit(): void {
-    this.route.queryParams
+    this.route.params
       .pipe(takeUntil(this.destroy$))
       .subscribe((params) => {
-        if (params['courseId']) {
-          this.loadProgramDetails(params['courseId']);
+        if (params['id']) {
+          this.loadProgramDetails(params['id']);
         }
       });
   }

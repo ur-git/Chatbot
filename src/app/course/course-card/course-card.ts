@@ -32,15 +32,17 @@ export class CourseCard {
 
   ngOnInit() {}
 
+  /**
+   * Navigate to the course detail page
+   */
   navigateToCourse() {
-    // this.router.navigate(['/course', this.course.id]);
-    const urlTree = this.router.createUrlTree(['/course'], {
-      queryParams: { courseId: this.program.id },
-    });
-    const fullUrl = window.location.origin + this.router.serializeUrl(urlTree);
-    window.open(fullUrl, '_blank');
+    this.router.navigate(['/program', this.program.id]);
   }
 
+  /**
+   * Get a random color for the course card to show in the tag
+   * @returns string
+   */
   getRandomColor(): string {
     const colors = [
       'pink',

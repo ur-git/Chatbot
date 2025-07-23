@@ -5,6 +5,6 @@ import { CourseDetail } from './course/course-detail/course-detail';
 export const routes: Routes = [
     { path: '', component: Chatbot },
     { path: 'chat', component: Chatbot },
-    { path: 'course', component: CourseDetail },
+    { path: 'program/:id', component: CourseDetail },
     { path: '**', redirectTo: '' }
 ];
