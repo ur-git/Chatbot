@@ -9,7 +9,7 @@
   "application": {
     "name": "Course Program Generator Bot",
     "version": "1.0.0",
-    "logo": "assets/images/logo.jpg",
+    "logo": "assets/images/logo.png",
     "description": "Hey! I'm your AI assistant here to generate a personalized program for you.",
     "supportEmail": "support@yourcompany.com"
   },
