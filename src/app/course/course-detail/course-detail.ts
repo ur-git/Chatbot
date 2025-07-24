@@ -84,8 +84,6 @@ export class CourseDetail {
           if (response && response.status === 200) {
             const response_data = response.data;
             this.courseService.addProgramDetails(response_data);
-            const sessionId = response.session_id;
-            this.storageService.setItem('sessionId', response.session_id);
           } else {
             this.message.error('Failed to load course details');
             this.router.navigate(['/']);
