@@ -46,14 +46,14 @@ export class CourseService {
           return {
             asset_id: asset.asset_id,
             title: asset.title,
-            description: asset.description,
+            description: asset?.description || '',
           };
         });
         
         return {
           topic_id: item.topic_id,
           title: item.title,
-          description: item.description,
+          description: item?.description || '',
           asset: asset,
         };
       });
