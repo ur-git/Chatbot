@@ -96,7 +96,7 @@
       }}</span> -->
       <nz-input-group nzSuffix class="chat-input-group">
         <textarea
-          id="myTextarea"
+          #chatInput
           nz-input
           [(ngModel)]="currentMessage"
           (keypress)="onKeyPress($event)"

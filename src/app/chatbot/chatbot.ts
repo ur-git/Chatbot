@@ -55,7 +55,7 @@ import { Storage } from '../services/storage';
 })
 export class Chatbot {
   carouselOptions = carouselOptions;
-  @ViewChild('myTextarea') myTextarea!: ElementRef<HTMLTextAreaElement>;
+  @ViewChild('chatInput') chatInput!: ElementRef<HTMLTextAreaElement>;
   @ViewChild('chatContainer', { static: false }) chatContainer!: ElementRef;
   private chatService = inject(ChatService);
   private message = inject(NzMessageService);
@@ -129,8 +129,6 @@ export class Chatbot {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       this.sendMessage();
-
-      this.myTextarea?.nativeElement.focus();
     }
   }
 
@@ -148,6 +146,9 @@ export class Chatbot {
         .pipe(
           finalize(() => {
             this.isLoading = false;
+            setTimeout(() => {
+              this.chatInput?.nativeElement.focus();
+            }, 500);
           })
         )
         .subscribe({
