@@ -17,6 +17,7 @@ import { CourseService } from '../../services/course-service';
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { Storage } from '../../services/storage';
 
 @Component({
   selector: 'app-course-detail',
@@ -43,6 +44,7 @@ export class CourseDetail {
   private router = inject(Router);
   private courseService = inject(CourseService);
   private message = inject(NzMessageService);
+  private storageService = inject(Storage); 
   program: ProgramDetails | null = null;
   isLoading = false;
   private destroy$ = new Subject<void>();
@@ -54,13 +56,11 @@ export class CourseDetail {
   }
 
   ngOnInit(): void {
-    this.route.params
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((params) => {
-        if (params['id']) {
-          this.loadProgramDetails(params['id']);
-        }
-      });
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      if (params['id']) {
+        this.loadProgramDetails(params['id']);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -82,8 +82,10 @@ export class CourseDetail {
       .subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
-            const response_data = response.data
+            const response_data = response.data;
             this.courseService.addProgramDetails(response_data);
+            const sessionId = response.session_id;
+            this.storageService.setItem('sessionId', response.session_id);
           } else {
             this.message.error('Failed to load course details');
             this.router.navigate(['/']);
