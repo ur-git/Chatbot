@@ -1,10 +1,10 @@
 {
   "apiEndpoints": {
     "apiBaseUrl": "",
-    "chat": "/chat",
-    "clearhistory": "/clear_history",
-    "getChatHistory": "/history",
-    "programDetails": "/program"
+    "chat": "/api/chat",
+    "clearhistory": "/api/clear_history",
+    "getChatHistory": "/api/history",
+    "programDetails": "/api/program"
   },
   "application": {
     "name": "Course Program Generator Bot",
