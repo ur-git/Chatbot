@@ -82,7 +82,8 @@ export class CourseDetail {
       .subscribe({
         next: (response: any) => {
           if (response && response.status === 200) {
-            this.courseService.addProgramDetails(response);
+            const response_data = response.data
+            this.courseService.addProgramDetails(response_data);
           } else {
             this.message.error('Failed to load course details');
             this.router.navigate(['/']);
