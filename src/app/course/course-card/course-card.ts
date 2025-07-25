@@ -29,8 +29,16 @@ export class CourseCard {
   @Input() program!: Program;
   @Input() compact: boolean = false;
   private router = inject(Router);
+  skillTags: { name: string; color: string }[] = [];
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.program.skills && this.program.skills.length > 0) {
+      this.skillTags = this.program.skills.map((skill) => ({
+        name: skill,
+        color: this.getRandomColor(),
+      }));
+    }
+  }
 
   /**
    * Navigate to the course detail page

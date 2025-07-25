@@ -15,9 +15,9 @@
         <span>{{ program.totalHours }} hrs</span>
       </nz-tag>
       <nz-tag
-        [nzColor]="getRandomColor()"
-        *ngFor="let skill of program.skills"
-        >{{ skill }}</nz-tag
+        *ngFor="let skill of skillTags"
+        [nzColor]="skill.color"
+        >{{ skill.name }}</nz-tag
       >
     </div>
   </div>
