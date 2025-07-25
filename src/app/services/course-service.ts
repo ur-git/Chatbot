@@ -21,7 +21,7 @@ export class CourseService {
    */
   getProgramDetailsApi(courseId: string) {
     const endpoint = this.configService.getApiEndpoint('programDetails');
-    const sessionId = this.storageService.getItem('sessionId'); 
+    const sessionId = this.storageService.getItem('sessionId');
     const URL = `${this.configService.apiBaseUrl}${endpoint}/${courseId}`;
 
     return this.http.get(URL);
@@ -33,26 +33,29 @@ export class CourseService {
    */
   addProgramDetails(response: any) {
     const programDetails: ProgramDetails = {
-      program_id: response.id,
-      title: response.title,
-      description: response.description,
-      totalHours: response.duration_hours,
-      skills: response.skills,
+      program_id: response?.id || '',
+      title: response?.title || '',
+      description: response?.description || '',
+      totalHours: response?.duration_hours || 0,
+      skills: response?.skills || [],
     };
 
     if (response.program && response.program.length > 0) {
       const program: Topic[] = response.program.map((item: any) => {
-        const asset: Asset[] = item.asset.map((asset: any) => {
-          return {
-            asset_id: asset.asset_id,
-            title: asset.title,
-            description: asset?.description || '',
-          };
-        });
-        
+        let asset: Asset[] = [];
+        if (item.asset && item.asset.length > 0) {
+          asset = item.asset.map((asset: any) => {
+            return {
+              asset_id: asset?.asset_id || '',
+              title: asset?.title || '',
+              description: asset?.description || '',
+            };
+          });
+        }
+
         return {
-          topic_id: item.topic_id,
-          title: item.title,
+          topic_id: item?.topic_id || '',
+          title: item?.title || '',
           description: item?.description || '',
           asset: asset,
         };

@@ -17,7 +17,10 @@
             <nz-icon nzType="clock-circle" />
             <span>{{ program.totalHours }} hrs</span>
           </nz-tag>
-          <nz-tag nzColor="default" *ngIf="program.programs && program.programs.length > 0">
+          <nz-tag
+            nzColor="default"
+            *ngIf="program.programs && program.programs.length > 0"
+          >
             <nz-icon nzType="book" />
             <span>{{ program.programs.length }} topics</span>
           </nz-tag>
@@ -27,7 +30,6 @@
             {{ tag }}
           </nz-tag>
         </div>
-
       </nz-skeleton>
     </nz-card>
 
@@ -51,9 +53,13 @@
         <div class="course-card-content">
           <nz-collapse nzAccordion>
             @for (asset of course.asset; track asset) {
-              <nz-collapse-panel [nzHeader]="asset.title" [nzActive]="false">
-                <p>{{ asset.description }}</p>
-              </nz-collapse-panel>
+            <nz-collapse-panel
+              [nzHeader]="asset.title"
+              [nzActive]="false"
+              [nzShowArrow]="asset.description !== '' ? true : false"
+            >
+              <p>{{ asset.description }}</p>
+            </nz-collapse-panel>
             }
           </nz-collapse>
         </div>
