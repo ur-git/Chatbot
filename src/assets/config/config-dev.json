@@ -11,7 +11,8 @@
     "version": "1.0.0",
     "logo": "assets/images/logo.png",
     "description": "Hey! I'm your AI assistant here to generate a personalized program for you.",
-    "supportEmail": "support@yourcompany.com"
+    "supportEmail": "support@yourcompany.com",
+    "requestTimeout": 10000
   },
   "userSettings": {
     "defaultLanguage": "en",

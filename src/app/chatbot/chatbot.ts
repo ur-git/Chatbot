@@ -16,7 +16,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { finalize, tap } from 'rxjs';
+import { finalize, tap, timeout } from 'rxjs';
 import { ChatMessage, carouselOptions } from '../interfaces/chat-interface';
 import { ChatService } from '../services/chat-service';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -144,6 +144,7 @@ export class Chatbot {
       this.chatService
         .sendMessage(messageContent)
         .pipe(
+          timeout(this.appInfo.requestTimeout),
           finalize(() => {
             this.isLoading = false;
             setTimeout(() => {

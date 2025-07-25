@@ -14,10 +14,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { CourseService } from '../../services/course-service';
-import { finalize, Subject, takeUntil } from 'rxjs';
+import { finalize, Subject, takeUntil, timeout } from 'rxjs';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { Storage } from '../../services/storage';
+import { Config } from '../../services/config';
 
 @Component({
   selector: 'app-course-detail',
@@ -44,11 +45,12 @@ export class CourseDetail {
   private router = inject(Router);
   private courseService = inject(CourseService);
   private message = inject(NzMessageService);
-  private storageService = inject(Storage); 
+  private storageService = inject(Storage);
+  private configService = inject(Config);
   program: ProgramDetails | null = null;
   isLoading = false;
   private destroy$ = new Subject<void>();
-
+  appInfo: any = null;
   constructor() {
     effect(() => {
       this.program = this.courseService.getProgramDetails();
@@ -56,11 +58,13 @@ export class CourseDetail {
   }
 
   ngOnInit(): void {
+    this.appInfo = this.configService.appInfo;
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       if (params['id']) {
         this.loadProgramDetails(params['id']);
       }
     });
+
   }
 
   ngOnDestroy(): void {
@@ -74,6 +78,7 @@ export class CourseDetail {
     this.courseService
       .getProgramDetailsApi(courseId)
       .pipe(
+        timeout(this.appInfo.requestTimeout),
         takeUntil(this.destroy$),
         finalize(() => {
           this.isLoading = false;
