@@ -26,18 +26,20 @@ export class Config {
     return {
       apiEndpoints: {
         apiBaseUrl: '',
-        chat: '/chat',
-        clearhistory: '/clear_history',
-        getChatHistory: '/history',
-        programDetails: '/program',
+        chat: '/api/chat',
+        clearhistory: '/api/clear_history',
+        getChatHistory: '/api/history',
+        programDetails: '/api/program',
+        generateProgram: '/api/program-status',
       },
       application: {
         name: 'Course Program Generator Bot',
         version: '1.0.0',
-        logo: 'assets/images/logo.jpg',
+        logo: 'assets/images/logo.png',
         description:
           "Hey! I'm your AI assistant here to generate a personalized program for you.",
         supportEmail: 'support@yourcompany.com',
+        requestTimeout: 10000,
       },
       userSettings: {
         defaultLanguage: 'en',

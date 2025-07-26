@@ -16,7 +16,22 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { finalize, tap, timeout } from 'rxjs';
+import {
+  catchError,
+  of,
+  delay,
+  timer,
+  finalize,
+  mergeMap,
+  tap,
+  throwError,
+  timeout,
+  retryWhen,
+  switchMap,
+  takeWhile,
+  expand,
+} from 'rxjs';
+import { delayWhen } from 'rxjs';
 import { ChatMessage, carouselOptions } from '../interfaces/chat-interface';
 import { ChatService } from '../services/chat-service';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -65,6 +80,7 @@ export class Chatbot {
   chatMessages: ChatMessage[] = [];
   currentMessage = '';
   isLoading = false;
+  isGenerating = false;
   private shouldScrollToBottom = false;
   isVisible = false;
   isOkLoading = false;
@@ -144,7 +160,6 @@ export class Chatbot {
       this.chatService
         .sendMessage(messageContent)
         .pipe(
-          timeout(this.appInfo.requestTimeout),
           finalize(() => {
             this.isLoading = false;
             setTimeout(() => {
@@ -155,7 +170,19 @@ export class Chatbot {
         .subscribe({
           next: (response: any) => {
             if (response) {
-              this.setBotResponse(response);
+              // Check for taskId and call another API
+              if (response && response.type === 'generating') {
+                this.getTaskStatus(response.taskId);
+              } else {
+                this.setBotResponse(response);
+              }
+            } else {
+              this.message.error('Failed to send message. Please try again.');
+
+              this.chatService.addBotResponse({
+                message: 'Sorry, I encountered an error. Please try again.',
+                suggestedPrograms: [],
+              });
             }
           },
           error: (error) => {
@@ -169,6 +196,40 @@ export class Chatbot {
           },
         });
     }
+  }
+
+  getTaskStatus(taskId: string) {
+    this.isGenerating = true;
+    this.chatService
+      .generateProgram(taskId)
+      .pipe(
+        finalize(() => {
+          this.isGenerating = false;
+        })
+      )
+      .subscribe({
+        next: (response: any) => {
+          if (response) {
+            this.setBotResponse(response);
+          }else{
+            this.message.error('Failed to send message. Please try again.');
+
+            this.chatService.addBotResponse({
+              message: 'Sorry, I encountered an error. Please try again.',
+              suggestedPrograms: [],
+            });
+          }
+        },
+        error: (err) => {
+          console.error('Error getting task status:', err);
+          this.message.error('Failed to send message. Please try again.');
+
+          this.chatService.addBotResponse({
+            message: 'Sorry, I encountered an error. Please try again.',
+            suggestedPrograms: [],
+          });
+        },
+      });
   }
 
   setBotResponse(response: any) {

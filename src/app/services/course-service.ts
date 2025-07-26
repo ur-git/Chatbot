@@ -21,7 +21,6 @@ export class CourseService {
    */
   getProgramDetailsApi(courseId: string) {
     const endpoint = this.configService.getApiEndpoint('programDetails');
-    const sessionId = this.storageService.getItem('sessionId');
     const URL = `${this.configService.apiBaseUrl}${endpoint}/${courseId}`;
 
     return this.http.get(URL);

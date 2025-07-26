@@ -19,6 +19,8 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { Storage } from '../../services/storage';
 import { Config } from '../../services/config';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @Component({
   selector: 'app-course-detail',
@@ -36,6 +38,8 @@ import { Config } from '../../services/config';
     NzListModule,
     NzSkeletonModule,
     NzCollapseModule,
+    NzIconModule,
+    NzToolTipModule
   ],
   templateUrl: './course-detail.html',
   styleUrl: './course-detail.scss',
@@ -64,7 +68,6 @@ export class CourseDetail {
         this.loadProgramDetails(params['id']);
       }
     });
-
   }
 
   ngOnDestroy(): void {
@@ -124,5 +127,18 @@ export class CourseDetail {
       default:
         return 'blue';
     }
+  }
+
+  /**
+   * Download the program as a JSON file
+   */
+  downloadProgram(): void {
+    const jsonData = JSON.stringify(this.program);
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${this.program?.title}.json`;
+    a.click();
   }
 }

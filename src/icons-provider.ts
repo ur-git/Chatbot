@@ -6,7 +6,9 @@ import {
   UserOutline,
   SettingOutline,
   ArrowLeftOutline,
-  DragOutline
+  DragOutline,
+  DownloadOutline,
+  BookOutline
 } from '@ant-design/icons-angular/icons';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 
@@ -17,7 +19,9 @@ const icons = [
   UserOutline,
   SettingOutline,
   ArrowLeftOutline,
-  DragOutline
+  DragOutline,
+  DownloadOutline,
+  BookOutline
 ];
 
 export function provideNzIcons(): EnvironmentProviders {

@@ -43,17 +43,18 @@ body {
 }
 
 .ant-card-body {
-  padding: 16px;
+  padding: 24px;
 }
 
-.course-content-card .ant-card-head-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--color-brand-primary);
-}
-
-.ant-card-meta-title{
+.course-header-card .ant-card-head-title {
   font-size: 24px;
+  font-weight: 600;
+}
+
+.course-content-card .ant-collapse-header {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-brand-primary) !important;
 }
 
 .course-tags .ant-tag {

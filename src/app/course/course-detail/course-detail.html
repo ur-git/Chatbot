@@ -5,13 +5,15 @@
       Back to Chat
     </button> -->
 
-    <nz-card class="course-header-card">
+    <nz-card
+      class="course-header-card"
+      [nzTitle]="program.title"
+      [nzExtra]="extraTemplate"
+    >
       <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
-        <nz-card-meta
-          [nzTitle]="program.title"
-          [nzDescription]="program.description"
-        >
-        </nz-card-meta>
+        <p class="course-header-card-description">
+          {{ program.description }}
+        </p>
         <div class="course-meta">
           <nz-tag nzColor="default">
             <nz-icon nzType="clock-circle" />
@@ -30,6 +32,19 @@
             {{ tag }}
           </nz-tag>
         </div>
+        <ng-template #extraTemplate>
+          <button
+            nz-button
+            nz-tooltip
+            nzType="primary"
+            nzSize="small"
+            [nzShape]="'round'"
+            nzTooltipTitle="Download Program"
+            (click)="downloadProgram()"
+          >
+            <i nz-icon nzType="download" nzTheme="outline"></i>
+          </button>
+        </ng-template>
       </nz-skeleton>
     </nz-card>
 
@@ -42,29 +57,32 @@
     class="course-content"
     *ngIf="program.programs && program.programs.length > 0"
   >
-    <nz-card
+    <nz-collapse
+      nzAccordion
       class="course-content-card"
       *ngFor="let course of program.programs"
-      [nzExtra]="dragTemplate"
-      [nzTitle]="course.title"
     >
-      <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
-        <p class="course-content-card-description">{{ course.description }}</p>
-        <div class="course-card-content">
-          <nz-collapse nzAccordion>
-            @for (asset of course.asset; track asset) {
-            <nz-collapse-panel
-              [nzHeader]="asset.title"
-              [nzActive]="false"
-              [nzShowArrow]="asset.description !== '' ? true : false"
-            >
-              <p>{{ asset.description }}</p>
-            </nz-collapse-panel>
-            }
-          </nz-collapse>
-        </div>
-      </nz-skeleton>
-    </nz-card>
+      <nz-collapse-panel [nzHeader]="course.title" [nzActive]="false" >
+        <nz-skeleton [nzActive]="true" [nzLoading]="isLoading">
+          <p class="course-content-card-description">
+            {{ course.description }}
+          </p>
+          <div class="course-card-content">
+            <nz-collapse nzAccordion>
+              @for (asset of course.asset; track asset) {
+              <nz-collapse-panel
+                [nzHeader]="asset.title"
+                [nzActive]="false"
+                [nzShowArrow]="asset.description !== '' ? true : false"
+              >
+                <p>{{ asset.description }}</p>
+              </nz-collapse-panel>
+              }
+            </nz-collapse>
+          </div>
+        </nz-skeleton>
+      </nz-collapse-panel>
+    </nz-collapse>
 
     <ng-template #dragTemplate>
       <nz-icon nzType="drag" nzTheme="outline" />

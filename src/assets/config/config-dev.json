@@ -4,7 +4,8 @@
     "chat": "/api/chat",
     "clearhistory": "/api/clear_history",
     "getChatHistory": "/api/history",
-    "programDetails": "/api/program"
+    "programDetails": "/api/program",
+    "generateProgram": "/api/program-status"
   },
   "application": {
     "name": "Course Program Generator Bot",

@@ -4,6 +4,9 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Config } from './config';
 import { Storage } from './storage';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { catchError, of, switchMap, throwError, timer } from 'rxjs';
+import { takeWhile } from 'rxjs';
+import { expand } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -84,6 +87,36 @@ export class ChatService {
     const options = { headers };
 
     return this.http.post(URL, body, options);
+  }
+
+  generateProgram(taskId: string) {
+    const chatEndpoint = this.configService.getApiEndpoint('generateProgram');
+    const URL = `${this.configService.apiBaseUrl}${chatEndpoint}/${taskId}`;
+    const makeRequest = () => this.http.get(URL);
+
+    return makeRequest().pipe(
+      expand((response: any) => {
+        if (response.status === 202) {
+          return timer(1000).pipe(switchMap(() => makeRequest())); // Retry after 1s
+        } else {
+          return of(response); // Pass through final response (likely 200)
+        }
+      }),
+      takeWhile((response) => response.status === 202, true), // Complete when status !== 202
+      switchMap((response) => {
+        if (response.status === 200) {
+          return of(response.body); // Final success
+        } else {
+          return throwError(
+            () => new Error(`Unexpected status: ${response.status}`)
+          ); // Unexpected final status
+        }
+      }),
+      catchError((error) => {
+        console.error('Final error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   addTypingResponse() {

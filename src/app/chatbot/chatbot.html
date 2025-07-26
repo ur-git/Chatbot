@@ -54,10 +54,18 @@
             ></nz-avatar>
 
             <div class="message-bubble">
-              <div class="message-text" *ngIf="message.sender === 'user'">{{ message.content }}</div>
-              <div class="message-text" *ngIf="message.sender === 'bot'">{{ message.content }}</div>
+              <div class="message-text" *ngIf="message.sender === 'user'">
+                {{ message.content }}
+              </div>
+              <div class="message-text" *ngIf="message.sender === 'bot'">
+                {{ message.content }}
+              </div>
               <div class="typing-indicator" *ngIf="message.sender === 'typing'">
+                @if(!isGenerating){
                 <span></span><span></span><span></span>
+                }@else{
+                <span>⏳ Generating program ...</span>
+                }
               </div>
 
               <!-- Course suggestions -->
@@ -87,9 +95,7 @@
   </nz-content>
 
   <!-- Chat footer -->
-  <nz-footer
-    class="chat-footer"
-  >
+  <nz-footer class="chat-footer">
     <div class="input-container">
       <!-- <span class="chat-footer-title" *ngIf="chatMessages.length === 0">{{
         appInfo.description
