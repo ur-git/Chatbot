@@ -172,7 +172,15 @@ export class Chatbot {
             if (response) {
               // Check for taskId and call another API
               if (response && response.type === 'generating') {
-                this.getTaskStatus(response.taskId);
+                const data = response.data;
+                this.getTaskStatus(data.task_id);
+              } else if (response && response.type === 'error') {
+                this.message.error('Failed to send message. Please try again.');
+
+                this.chatService.addBotResponse({
+                  message: 'Sorry, I encountered an error. Please try again.',
+                  suggestedPrograms: [],
+                });
               } else {
                 this.setBotResponse(response);
               }
@@ -211,7 +219,7 @@ export class Chatbot {
         next: (response: any) => {
           if (response) {
             this.setBotResponse(response);
-          }else{
+          } else {
             this.message.error('Failed to send message. Please try again.');
 
             this.chatService.addBotResponse({
