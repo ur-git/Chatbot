@@ -92,24 +92,24 @@ export class ChatService {
   generateProgram(taskId: string) {
     const chatEndpoint = this.configService.getApiEndpoint('generateProgram');
     const URL = `${this.configService.apiBaseUrl}${chatEndpoint}/${taskId}`;
-    const makeRequest = () => this.http.get(URL);
+    const makeRequest = () => this.http.get(URL, { responseType: 'text' });
 
     return makeRequest().pipe(
       expand((response: any) => {
-        if (response.status === 202) {
-          return timer(1000).pipe(switchMap(() => makeRequest())); // Retry after 1s
+        if (response.type === 'generating') {
+          return timer(1000).pipe(switchMap(() => makeRequest()));
         } else {
-          return of(response); // Pass through final response (likely 200)
+          return of(response);
         }
       }),
-      takeWhile((response) => response.status === 202, true), // Complete when status !== 202
+      takeWhile((response) => response.type === 'generating', true),
       switchMap((response) => {
-        if (response.status === 200) {
-          return of(response.body); // Final success
+        if (response.type === 'program') {
+          return of(response);
         } else {
           return throwError(
-            () => new Error(`Unexpected status: ${response.status}`)
-          ); // Unexpected final status
+            () => new Error(`Unexpected status: ${response.type}`)
+          );
         }
       }),
       catchError((error) => {
