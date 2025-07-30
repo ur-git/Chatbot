@@ -68,6 +68,15 @@
                 }
               </div>
 
+              <!-- chat user selection options -->
+              <div class="message-options" *ngIf="message.options && message.options.length > 0">
+                <nz-radio-group [(ngModel)]="radioValue" (ngModelChange)="onOptionSelected($event)">
+                  <label nz-radio [nzValue]="option.value" *ngFor="let option of message.options">
+                    {{ option.label }}
+                  </label>
+                </nz-radio-group>
+              </div>
+
               <!-- Course suggestions -->
               <div
                 *ngIf="message.programs && message.programs.length > 0"

@@ -92,7 +92,7 @@ export class ChatService {
   generateProgram(taskId: string) {
     const chatEndpoint = this.configService.getApiEndpoint('generateProgram');
     const URL = `${this.configService.apiBaseUrl}${chatEndpoint}/${taskId}`;
-    const makeRequest = () => this.http.get(URL, { responseType: 'text' });
+    const makeRequest = () => this.http.get(URL);
 
     return makeRequest().pipe(
       expand((response: any) => {
@@ -135,7 +135,7 @@ export class ChatService {
    * Service function to add bot response to chat messages
    */
   addBotResponse(response: any): void {
-    const botMessage: ChatMessage = {
+    let botMessage: ChatMessage = {
       id: response.id || this.generateId(),
       content: response.message,
       type: response.type,
@@ -143,6 +143,12 @@ export class ChatService {
       timestamp: new Date(),
       programs: response.suggestedPrograms,
     };
+    if (response.options) {
+      botMessage = {
+        ...botMessage,
+        options: response.options,
+      };
+    }
     this.chatMessages.update((messages) => [
       ...messages.filter((msg) => msg.sender !== 'typing'),
       botMessage,

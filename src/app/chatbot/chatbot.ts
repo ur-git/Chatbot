@@ -43,6 +43,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { Config } from '../services/config';
 import { Storage } from '../services/storage';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 
 @Component({
   selector: 'app-chatbot',
@@ -64,6 +65,7 @@ import { Storage } from '../services/storage';
     CarouselModule,
     NzToolTipModule,
     NzModalModule,
+    NzRadioModule
   ],
   templateUrl: './chatbot.html',
   styleUrl: './chatbot.scss',
@@ -85,6 +87,7 @@ export class Chatbot {
   isVisible = false;
   isOkLoading = false;
   appInfo: any = null;
+  radioValue: string = '';
 
   constructor() {
     effect(
@@ -197,9 +200,27 @@ export class Chatbot {
             console.error('Error sending message:', error);
             this.message.error('Failed to send message. Please try again.');
 
-            this.chatService.addBotResponse({
-              message: 'Sorry, I encountered an error. Please try again.',
-              suggestedPrograms: [],
+            this.setBotResponse({
+              type: 'basic',
+              data: {
+                message:
+                  "Hello! You said: 'hi'. I'm a basic chatbot with memory now! How can I assist you further?",
+                id: 'b2b80bf0-b1be-4a2f-bafb-7ec2f889c237',
+                options: [
+                  {
+                    label: 'Option 1',
+                    value: 'option1',
+                  },
+                  {
+                    label: 'Option 2',
+                    value: 'option2',
+                  },
+                  {
+                    label: 'Option 3',
+                    value: 'option3',
+                  },
+                ],
+              },
             });
           },
         });
@@ -207,6 +228,7 @@ export class Chatbot {
   }
 
   getTaskStatus(taskId: string) {
+    console.log('taskId', taskId);
     this.isGenerating = true;
     this.chatService
       .generateProgram(taskId)
@@ -252,6 +274,13 @@ export class Chatbot {
         type: responseType,
         message: responseData.message,
       };
+
+      if (responseData.options) {
+        botResponse = {
+          ...botResponse,
+          options: responseData.options,
+        };
+      }
     } else if (responseType === 'program') {
       botResponse = {
         id: responseData.id,
@@ -264,6 +293,16 @@ export class Chatbot {
     }
 
     this.chatService.addBotResponse(botResponse);
+  }
+
+  /**
+   * Function to handle option selection from bot
+   * @param event
+   */
+  onOptionSelected(event: any) {
+    const selectedOption = event;
+    this.currentMessage = selectedOption;
+    this.sendMessage();
   }
 
   /**

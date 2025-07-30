@@ -1,6 +1,6 @@
 {
   "apiEndpoints": {
-    "apiBaseUrl": "",
+    "apiBaseUrl": "https://0dc8d4542f26.ngrok-free.app",
     "chat": "/api/chat",
     "clearhistory": "/api/clear_history",
     "getChatHistory": "/api/history",
